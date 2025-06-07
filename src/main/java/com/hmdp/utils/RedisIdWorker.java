@@ -3,6 +3,7 @@ package com.hmdp.utils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -17,12 +18,12 @@ public class RedisIdWorker {
      * 序列号的位数
      */
     private static final int COUNT_BITS = 32;
-
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-    public RedisIdWorker(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
+//    public RedisIdWorker(StringRedisTemplate stringRedisTemplate) {
+//        this.stringRedisTemplate = stringRedisTemplate;
+//    }
 
     public long nextId(String keyPrefix) {
         // 1.生成时间戳
@@ -33,10 +34,10 @@ public class RedisIdWorker {
         // 2.生成序列号
         // 2.1.获取当前日期，精确到天
         String date = now.format(DateTimeFormatter.ofPattern("yyyy:MM:dd"));
-        // 2.2.自增长
+        // 2.2.自增长，让这个key的值自增长
         long count = stringRedisTemplate.opsForValue().increment("icr:" + keyPrefix + ":" + date);
 
-        // 3.拼接并返回
+        // 3.拼接并返回，这里是或运算，或运算其实就是or，
         return timestamp << COUNT_BITS | count;
     }
 }

@@ -237,6 +237,8 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         // 3.返回订单id
         return Result.ok(orderId);
     }*/
+
+    //最原始的方式
     /*@Override
     public Result seckillVoucher(Long voucherId) {
         // 1.查询优惠券

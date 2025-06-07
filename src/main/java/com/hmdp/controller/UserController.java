@@ -9,11 +9,15 @@ import com.hmdp.entity.User;
 import com.hmdp.entity.UserInfo;
 import com.hmdp.service.IUserInfoService;
 import com.hmdp.service.IUserService;
+import com.hmdp.utils.RedisConstants;
 import com.hmdp.utils.UserHolder;
+import com.hmdp.utils.BaseContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -33,6 +37,8 @@ public class UserController {
 
     @Resource
     private IUserInfoService userInfoService;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 发送手机验证码
@@ -58,11 +64,25 @@ public class UserController {
      * @return 无
      */
     @PostMapping("/logout")
-    public Result logout(){
-        // TODO 实现登出功能
-        return Result.fail("功能未完成");
+    public Result logout(HttpSession session, HttpServletRequest request){
+        // 销毁ThreadLocal中的用户信息
+        BaseContext.remove();
+        // 销毁session
+        session.invalidate();
+        // 获取请求头中的token
+        String tokenKey = "hmdp:login:token:" + request.getHeader("authorization");
+        // 判断redis中的tokenKey是否存在
+        if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(tokenKey))) {
+            // 使redis中的token失效
+            stringRedisTemplate.delete(tokenKey);
+        }
+        return Result.ok();
     }
 
+    /**
+     * 获取当前登录的用户
+     * @return 当前登录的用户信息
+     */
     @GetMapping("/me")
     public Result me(){
         // 获取当前登录的用户并返回

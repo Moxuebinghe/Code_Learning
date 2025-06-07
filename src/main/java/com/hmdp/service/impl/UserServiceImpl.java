@@ -55,7 +55,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 3.符合，生成验证码
         String code = RandomUtil.randomNumbers(6);
 
-        // 4.保存验证码到 session
+        // 4.保存验证码到 session，后修改为注入到redis中，TimeUnit.MINUTES 表示分钟
+        // 4.1.保存验证码到 redis中，设置有效期为 2 分钟
+        // session.setAttribute("code", code);原版用的session
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         // 5.发送验证码
@@ -94,7 +96,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String token = UUID.randomUUID().toString(true);
         // 7.2.将User对象转为HashMap存储
         UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        //笨方法
+        // Map<String, Object> userMap = new HashMap<>();
+        // userMap.put("id", userDTO.getId());
+        // userMap.put("nickName", userDTO.getNickName());
+//         userMap.put("icon", userDTO.getIcon());
+
+        //将UserDTO对象转为HashMap存储，忽略null值，方便使用putAll方法存储到redis中，要不然一次
+        // 只能存储一个字段，需要使用put方法，一次一个field，对应一个value
         Map<String, Object> userMap = BeanUtil.beanToMap(userDTO, new HashMap<>(),
+                // 忽略null值，setFieldValueEditor方法是一个函数式接口，用于编辑字段值，这里是将字段值转为字符串确保
+                // 可以存储到redis中，因为我们用的是StringRedisTemplate，所以需要将字段值转为字符串，否则会报错
                 CopyOptions.create()
                         .setIgnoreNullValue(true)
                         .setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));

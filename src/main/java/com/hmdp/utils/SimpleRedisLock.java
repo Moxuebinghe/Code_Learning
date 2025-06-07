@@ -30,10 +30,14 @@ public class SimpleRedisLock implements ILock {
     @Override
     public boolean tryLock(long timeoutSec) {
         // 获取线程标示
-        String threadId = ID_PREFIX + Thread.currentThread().getId();
+        long id = Thread.currentThread().getId();
+        //前缀拼接-线程id
+        String threadId = ID_PREFIX + id;
         // 获取锁
         Boolean success = stringRedisTemplate.opsForValue()
                 .setIfAbsent(KEY_PREFIX + name, threadId, timeoutSec, TimeUnit.SECONDS);
+
+        // 自动拆箱可能会有空指针异常，需要进行处理,Boolean.TRUE是一个常量，不会为空
         return Boolean.TRUE.equals(success);
     }
 
