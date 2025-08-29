@@ -262,8 +262,6 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         return createVoucherOrder(voucherId);
     }
 
-
-
     @Transactional
     public Result createVoucherOrder(Long voucherId) {
         // 5.一人一单
