@@ -11,7 +11,7 @@ public class QuickSort{
         }
     }
 
-    public int[] sortArray(int[] a) {
+    public int[] sortArray(int[] a) {// 快速排序主函数
         quick(a, 0, a.length - 1);
         return a;// 返回排序后的数组
     }
@@ -23,7 +23,12 @@ public class QuickSort{
         quick(a, left, p - 1); // 对左侧子数组递归排序
         quick(a, p + 1, right); // 对右侧子数组递归排序
     }
-
+    // 交换数组中两个元素的位置
+    public void swap(int[] a, int i, int j) {
+        int t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
     public int partition(int[] a, int left, int right) {// 分区函数：将数组分为两部分，小于基准值的在左，大于基准值的在右
         // 随机选择一个基准点，避免最坏情况（如数组接近有序）
         int idx = ThreadLocalRandom.current().nextInt(right - left + 1) + left;
@@ -53,10 +58,5 @@ public class QuickSort{
         swap(a, j, left);
         return j;
     }
-    // 交换数组中两个元素的位置
-    public void swap(int[] a, int i, int j) {
-        int t = a[i];
-        a[i] = a[j];
-        a[j] = t;
-    }
+
 }

@@ -1,5 +1,5 @@
 public class SelectionSort {
-    public static void main(String[] args) {
+    public static void main(String[] args) {// 测试
         int[] arr = { 5, 3, 8, 2, 1 };
         int[] sortArr = selectionSort(arr);
         for (int i : sortArr) {

@@ -12,6 +12,7 @@ public class MergeSort {
         int[] arr_2 = Arrays.copyOfRange(arr, middle, arr.length);   // copyOfRange方法创建一个数组，从索引middle开始，复制到索引arr.length-1
         return merge(mergeSort(arr_1), mergeSort(arr_2));
     }
+
     public static int[] merge(int[] arr_1, int[] arr_2) {  // 合并两个有序数组
         int[] sorted_arr = new int[arr_1.length + arr_2.length];  // 创建一个新数组，用于保存合并后的有序数组
         int idx = 0, i = 0, j = 0;  // i表示arr_1的索引，j表示arr_2的索引
@@ -40,6 +41,7 @@ public class MergeSort {
         }
         return sorted_arr;
     }
+
     public static void main(String[] args) {
         int[] arr = {22, 11, 33, 44, 55, 66, 77, 88, 99, 10};
         int[] sorted_arr = mergeSort(arr);
