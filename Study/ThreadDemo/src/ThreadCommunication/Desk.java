@@ -5,10 +5,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Desk {
     /*
-     * 作用：控制生产者和消费者的执行
-     *
+     * 桌子作用：控制生产者和消费者的执行
      * */
-
     //是否有面条  0：没有面条  1：有面条
     public static int foodFlag = 0;
 

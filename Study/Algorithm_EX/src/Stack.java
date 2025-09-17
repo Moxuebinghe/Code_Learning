@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Test2 {//基本的栈操作
+public class Stack {//基本的栈操作
     public static class MyStack {
         private int[] storage;//存放栈中元素的数组
         private int capacity;//栈的容量

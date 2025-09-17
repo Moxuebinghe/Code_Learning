@@ -1,7 +1,6 @@
 package ThreadCommunication;
 
 public class Cook extends Thread{
-
     @Override
     public void run() {
         /*

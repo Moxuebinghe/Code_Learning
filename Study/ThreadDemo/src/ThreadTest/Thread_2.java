@@ -1,6 +1,6 @@
 package ThreadTest;
 
-public class Thread_2_2 {
+public class Thread_2 {
     public static void main(String[] args)
     {
         //匿名内部类写法
